@@ -1,0 +1,43 @@
+#!/bin/sh
+
+. git-simple-common.sh
+
+if [ X"$1" = X"-h" ]; then
+	echo "Usage: git switch [branch]"
+	echo "	Performs an optional stash of current changes before switching to [branch] where it"
+	echo "	checks for any stashes that can be popped, and applies those."
+	exit 0
+fi
+
+# Exit early if we're already in this branch.
+CURRENT_BRANCH_NAME=`current_branch_name`
+if [ "${CURRENT_BRANCH_NAME}" = "$1" ]; then
+	die "Already in branch '$1'"
+fi
+
+# Check if we're in a dirty branch, and if so, stash.
+is_dirty
+if [ X"$?" = X"1" ]; then
+	warn "Stashing branch '${current_branch_name}'"
+	git stash save "git-simple: stashing before switching branches"
+fi
+
+if [[ -n $1 ]]; then
+	TO_BRANCH=`git branch | sed -e 's/[ \*]*//g' | grep $1`
+	# Doesn't exist, uh oh.
+	[ X"$?" = X"1" ] && die "Branch '$1' does not exist. Did you maybe mean: git develop?"
+	
+	# Switch the branch.
+	git checkout $1
+	if [ X"$?" = X"0" ]; then
+		# Switched the branch, here we need to check for a stash, apply it if there's one before exiting.
+		STASH_INDEX=`git stash list | grep ": On $1" | awk -F'[{}]' '$1 ~/stash@$/{print $2}'`
+		CURRENT_BRANCH=`git branch | grep "^\*" | sed -e 's/[ \*]*//g'`
+		if [[ -n ${STASH_INDEX} ]]; then
+			warn "Popping stash for branch '${current_branch_name}'"
+			git stash pop "stash@{${STASH_INDEX}}"
+		fi
+	else
+		die "Unsure what happened. Aborting."
+	fi
+fi
