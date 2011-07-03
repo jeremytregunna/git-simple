@@ -16,11 +16,7 @@ if [ "${CURRENT_BRANCH_NAME}" = "$1" ]; then
 fi
 
 # Check if we're in a dirty branch, and if so, stash.
-is_dirty
-if [ X"$?" = X"1" ]; then
-	warn "Stashing branch '${current_branch_name}'"
-	git stash save "git-simple: stashing before switching branches"
-fi
+stash_it "switching branches"
 
 if [[ -n $1 ]]; then
 	TO_BRANCH=`git branch | sed -e 's/[ \*]*//g' | grep $1`
@@ -34,7 +30,7 @@ if [[ -n $1 ]]; then
 		STASH_INDEX=`git stash list | grep ": On $1" | awk -F'[{}]' '$1 ~/stash@$/{print $2}'`
 		CURRENT_BRANCH=`git branch | grep "^\*" | sed -e 's/[ \*]*//g'`
 		if [[ -n ${STASH_INDEX} ]]; then
-			warn "Popping stash for branch '${current_branch_name}'"
+			warn "Popping stash for branch ${current_branch_name}"
 			git stash pop "stash@{${STASH_INDEX}}"
 		fi
 	else

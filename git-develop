@@ -1,0 +1,26 @@
+#!/bin/sh
+
+. git-simple-common.sh
+
+if [ X"$1" = X"-h" ]; then
+	echo "Usage: git develop [new_branch] [parent_branch]"
+	echo "	Creates a new branch [new_branch] detached from [parent_branch] or the current"
+	echo "	branch, if [parent_branch] is not specified."
+	exit 0
+fi
+
+NEW_BRANCH_NAME=$1
+[ -z $NEW_BRANCH_NAME ] && die "No branch name was provided."
+
+PARENT_BRANCH_NAME=$2
+
+for branch in `branch_names`; do
+	[ X"$branch" = X"$NEW_BRANCH_NAME" ] && die "Branch name '$NEW_BRANCH_NAME' is already in use. Try another."
+done
+
+# Check if we're in a dirty branch, and if so, stash.
+stash_it "switching branches"
+
+# Check out the new branch, detached from a parent.
+[ -n $PARENT_BRANCH_NAME ] && git checkout $PARENT_BRANCH_NAME
+git checkout -b $NEW_BRANCH_NAME
