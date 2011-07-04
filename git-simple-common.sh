@@ -49,6 +49,6 @@ unstash_it() {
 
     CURRENT_BRANCH_NAME=`current_branch_name`
     warn "Unstashing branch '${CURRENT_BRANCH_NAME}'"
-    STASH_INDEX=`git stash list | grep ": On (" | awk -F'[{}]' '( ~/stash@$/{print [}'`
+    STASH_INDEX=`git stash list | grep ": On $1" | awk -F'[{}]' '$1 ~/stash@$/{print $2}'`
     [ -n ${STASH_INDEX} ] && git stash pop "stash@{${STASH_INDEX}}"
 }
