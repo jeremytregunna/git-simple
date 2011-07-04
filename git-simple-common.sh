@@ -47,9 +47,9 @@ unstash_it() {
     [ -z "$1" ] && die "unstash_it(): Must supply an argument"
     VERB=$1
 
-    STASH_INDEX=`git stash list | grep ": On $1" | awk -F'[{}]' '$1 ~/stash@$/{print $2}'`
+    CURRENT_BRANCH_NAME=`current_branch_name`
+    STASH_INDEX=`git stash list | grep ": On ${CURRENT_BRANCH_NAME}" | awk -F'[{}]' '$1 ~/stash@$/{print $2}'`
     if [ "$STASH_INDEX" != "" ]; then
-        CURRENT_BRANCH_NAME=`current_branch_name`
         warn "Unstashing branch '${CURRENT_BRANCH_NAME}'"
         git stash pop "stash@{${STASH_INDEX}}"
     fi
