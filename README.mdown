@@ -14,6 +14,14 @@ So that's why I built this.
 In its present form, it's effectively a reimplementation of legit in the Bourne shell instead of Python. However, I'm going to make further changes
 which will bring in some partial support for the nvie branching model as well, effectively combining legit and git-flow.
 
+## Installing
+
+Installing git-simple is as easy as identifying the spot you want to install it to, i.e., `/usr/local/bin` (some place in your `$PATH`) then
+copying the `git-*` files into that directory.
+
+Please keep in mind that this should be considered alpha software. It is in use in production by myself, but it may still have bugs. Please report
+any you find on the issue tracker.
+
 ## Contributing
 
 If you'd like to fix a bug, implement a feature or otherwise? Check out the issue tracker. These are a good place to get involved. If nothing is
