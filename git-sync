@@ -1,0 +1,36 @@
+#!/bin/sh
+
+. git-simple-common.sh
+
+if [ X"$1" = X"-h" ]; then
+	echo "Usage: git sync [branch]"
+  echo "  Synchronizes [branch] with its published counterpart, or if [branch] is not"
+  echo "  supplied, assumes your current branch."
+	exit 0
+fi
+
+BRANCH=$1
+[ -z ${BRANCH} ] && BRANCH=`current_branch_name`
+
+FOUND_REMOTE_BRANCH=0
+for br in `remote_branch_names`; do
+    branch=`echo $br | sed -e s,.*/,,g`
+    [ X"$branch" = X"$BRANCH" ] && FOUND_REMOTE_BRANCH=1
+done
+
+[ ${FOUND_REMOTE_BRANCH} -eq 0 ] && die "Could not find a published branch named '${BRANCH}'. Maybe publish first?"
+
+stash_it "synching branches"
+
+git fetch origin
+
+REMOTE_NAME=`git remote`
+
+MERGES=`git log --merges ${REMOTE_NAME}/${BRANCH}..${BRANCH} | grep commit`
+if [[ -n ${MERGES} ]]; then
+    git merge ${REMOTE_NAME}/${BRANCH}
+else
+    git rebase ${REMOTE_NAME}/${BRANCH}
+fi
+
+git push ${REMOTE_NAME} ${BRANCH}
