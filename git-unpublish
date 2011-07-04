@@ -1,0 +1,23 @@
+#!/bin/sh
+
+. git-simple-common.sh
+
+if [ X"$1" = X"-h" ]; then
+	echo "Usage: git unpublish [branch]"
+  echo "  Removes a branch from the remote. Presently only talks to the origin remote."
+	exit 0
+fi
+
+BRANCH=$1
+[ -z ${BRANCH} ] && die "No branch was specified."
+
+FOUND_REMOTE_BRANCH=0
+for br in remote_branch_names; do
+    branch=`echo $br | sed -e s,.*/,,g`
+    [ X"$branch" = X"$BRANCH" ] && FOUND_REMOTE_BRANCH=1
+done
+
+[ ${FOUND_REMOTE_BRANCH} -eq 0 ] && die "Branch '$BRANCH' is not published."
+
+# TODO: Support multiple remotes
+git push origin :$BRANCH
