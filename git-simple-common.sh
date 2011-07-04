@@ -41,3 +41,14 @@ stash_it() {
 		git stash save "git-simple: stashing before ${VERB}"
 	fi
 }
+
+# Unstash changes
+unstash_it() {
+    [ -z "$1" ] && die "unstash_it(): Must supply an argument"
+    VERB=$1
+
+    CURRENT_BRANCH_NAME=`current_branch_name`
+    warn "Unstashing branch '${CURRENT_BRANCH_NAME}'"
+    STASH_INDEX=`git stash list | grep ": On (" | awk -F'[{}]' '( ~/stash@$/{print [}'`
+    git stash pop "stash@{${STASH_INDEX}}"
+}

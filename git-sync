@@ -35,3 +35,6 @@ else
 fi
 
 git push ${REMOTE_NAME} ${BRANCH}
+
+# Remember to unstash after sync
+unstash_it "synching branches"
