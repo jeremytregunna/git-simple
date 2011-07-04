@@ -3,17 +3,20 @@
 . git-simple-common.sh
 
 if [ X"$1" = X"-h" ]; then
-	echo "Usage: git sync [branch]"
-  echo "  Synchronizes [branch] with its published counterpart, or if [branch] is not"
-  echo "  supplied, assumes your current branch."
+	echo "Usage: git sync [branch] [remote]"
+	echo "  Synchronizes [branch] with its published counterpart on [remote], or if"
+	echo "  [branch] is not supplied, assumes your current branch. If [remote] is not"
+	echo "  supplied, assumes origin."
 	exit 0
 fi
 
 BRANCH=$1
+REMOTE_NAME=$2
 [ -z ${BRANCH} ] && BRANCH=`current_branch_name`
+[ -z ${REMOTE_NAME} ] && REMOTE_NAME="origin"
 
 FOUND_REMOTE_BRANCH=0
-for br in `remote_branch_names`; do
+for br in `remote_branch_names | grep ${REMOTE_NAME}`; do
     branch=`echo $br | sed -e s,.*/,,g`
     [ X"$branch" = X"$BRANCH" ] && FOUND_REMOTE_BRANCH=1
 done
@@ -23,8 +26,6 @@ done
 stash_it "synching branches"
 
 git fetch origin
-
-REMOTE_NAME=`git remote`
 
 MERGES=`git log --merges ${REMOTE_NAME}/${BRANCH}..${BRANCH} | grep commit`
 if [[ -n ${MERGES} ]]; then
