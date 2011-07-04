@@ -1,0 +1,45 @@
+# git-simple
+_Simplify your git workflow._
+
+## History
+
+This project was born out of having a workflow myself which involved many steps, to ensure consistency across my branches and with my team members.
+Around this time, GitHub released their GitHub for Mac and another piece of software called legit made its way around, which was like GitHub for Mac
+but for the command line. Unfortunately for me, I still wanted my own (with a more "integrated" feel) custom workflow, one I could easily modify
+later on—I have an interest in the Quantitative Coder project, and data mining myself while coding would involve, in theory, nothing I'd have to do
+manually, just change my workflow scripts.
+
+So that's why I built this.
+
+In its present form, it's effectively a reimplementation of legit in the Bourne shell instead of Python. However, I'm going to make further changes
+which will bring in some partial support for the nvie branching model as well, effectively combining legit and git-flow.
+
+## Contributing
+
+If you'd like to fix a bug, implement a feature or otherwise? Check out the issue tracker. These are a good place to get involved. If nothing is
+listed there that you'd like to do, create one, let's talk about it on the issue tracker. You can then write the code, send a pull request, and
+we'll take it from there.
+
+Only thing I ask is that tabs are actual tabs, not spaces, in script files, and that you follow the style present in the scripts now.
+
+## License
+
+You are free to use this code as you see fit, subject to this understanding:
+
+    I hereby disclaim all my rights and responsibilities to this code, and place this code in the public domain.
+
+In jurisdictions which do not recognize the public domain, you are free to use this code under the following conditions:
+
+    Copyright © 2011, Jeremy Tregunna, All Rights Reserved.
+
+    Permission is hereby granted, free or charge, to any person obtaining a copy of this software and associated documentation
+    (the "Software"), to deal in the Software without restriction, including without limitation of the rights to use, copy,
+    modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software
+    is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the software.
+
+    THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT ANY WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+    WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+    COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN ACTION OF CONTRACT, TORT OR OTHERWISE,
+    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE SOFTWARE.
