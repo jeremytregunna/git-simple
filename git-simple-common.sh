@@ -19,6 +19,11 @@ branch_names() {
 	git branch | sed -e 's/[ \*]*//g'
 }
 
+# Get all the remote branch names
+remote_branch_names() {
+	git branch -r | sed -e 's/[ \*]*//g'
+}
+
 # Get the current branch name.
 current_branch_name() {
 	git branch | grep "^\*" | sed -e 's/[ \*]*//g'

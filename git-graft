@@ -1,0 +1,41 @@
+#!/bin/sh
+
+. git-simple-common.sh
+
+if [ X"$1" = X"-h" ]; then
+	echo "Usage: git graft [branch] [into_branch]"
+	echo "	Merges [branch] into [into_branch] and then deletes [branch]. Only unpublished"
+	echo "	branches may be merged."
+	exit 0
+fi
+
+TEMP_BRANCH_NAME=$1
+[ -z $TEMP_BRANCH_NAME ] && die "No branches were supplied."
+PERM_BRANCH_NAME=$2
+[ -z $PERM_BRANCH_NAME ] && die "Need a branch to merge into."
+
+FOUND_BRANCH=0
+FOUND_PERM_BRANCH=0
+for branch in `branch_names`; do
+    [ X"$branch" = X"$TEMP_BRANCH_NAME" ] && FOUND_BRANCH=1
+    [ X"$branch" = X"$PERM_BRANCH_NAME" ] && FOUND_PERM_BRANCH=1
+done
+[ ${FOUND_BRANCH} -eq 0 ] && die "No branch named '$TEMP_BRANCH_NAME' exists, please try another."
+[ ${FOUND_PERM_BRANCH} -eq 0 ] && die "No branch named '$PERM_BRANCH_NAME' exists, please try another."
+
+FOUND_REMOTE_BRANCH=0
+for branch in `remote_branch_names`; do
+    [ X"$branch" = X"$TEMP_BRANCH_NAME" ] && FOUND_REMOTE_BRANCH=1
+done
+[ ${FOUND_REMOTE_BRANCH} -eq 1 ] && die "Can only graft unpublished branches. Unpublish '$TEMP_BRANCH_NAME' and try again."
+
+# Switch to the branch
+git switch $PERM_BRANCH_NAME
+
+# Graft branches
+git merge --no-ff $TEMP_BRANCH_NAME
+if [ $? -eq 0 ]; then
+    git branch -D $TEMP_BRANCH_NAME
+else
+    die "There was a problem merging, so the branch will not be deleted."
+fi
