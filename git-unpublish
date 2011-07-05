@@ -22,4 +22,4 @@ done
 [ ${FOUND_REMOTE_BRANCH} -eq 0 ] && die "Branch '$BRANCH' is not published."
 
 # TODO: Support multiple remotes
-git push ORIGIN :$BRANCH
+git push $ORIGIN :$BRANCH
